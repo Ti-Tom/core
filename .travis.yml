@@ -8,6 +8,7 @@ cache:
 
 before_install:
     if [[ "${DB:0:5}" == "mysql" ]]; then mysql -e 'CREATE DATABASE `pragma-core`;'; fi;
+
 php:
   - '7.0'
   - '7.1'
@@ -17,7 +18,9 @@ env:
   - DB=sqlite
   - DB=sqlite.uidmysql
   - DB=sqlite.uidphp
+
 install: composer install --no-interaction --quiet --optimize-autoloader
+
 script:
   - vendor/bin/phpunit --bootstrap ./tests/bootstrap.config.$DB.php tests/
 
