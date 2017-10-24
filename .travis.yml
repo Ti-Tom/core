@@ -15,7 +15,9 @@ php:
   - nightly
 env:
   - DB=sqlite
-install: composer install --no-interaction --quiet --optimize-autoloader
+install:
+  - phpenv config-rm xdebug.ini
+  - composer install --no-interaction --quiet --optimize-autoloader
 script:
   - vendor/bin/phpunit --bootstrap ./tests/bootstrap.config.$DB.php tests/
   - vendor/bin/phpunit --bootstrap ./tests/bootstrap.config.$DB.uidmysql.php tests/
