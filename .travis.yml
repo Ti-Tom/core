@@ -60,7 +60,7 @@ jobs:
         addons:
             mariadb: '10.2'
 
-      - stage: Test hhvm & mariadb
+      - stage: Test hhvm & mariadb 10.1
         php: hhvm
         services:
           - mysql
