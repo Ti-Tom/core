@@ -7,7 +7,7 @@ cache:
     - $HOME/.composer/cache
 
 before_install:
-    if [[ "${DB:0:5}" == "mysql" ]]; then mysql -e 'CREATE DATABASE `pragma-core`;'; fi;
+    if [[ "$DB" == "mysql" ]]; then mysql -e 'CREATE DATABASE `pragma-core`;'; fi;
 php:
   - '7.0'
   - '7.1'
@@ -15,97 +15,81 @@ php:
   - nightly
 env:
   - DB=sqlite
-  - DB=sqlite.uidmysql
-  - DB=sqlite.uidphp
 install: composer install --no-interaction --quiet --optimize-autoloader
 script:
   - vendor/bin/phpunit --bootstrap ./tests/bootstrap.config.$DB.php tests/
+  - vendor/bin/phpunit --bootstrap ./tests/bootstrap.config.$DB.uidmysql.php tests/
+  - vendor/bin/phpunit --bootstrap ./tests/bootstrap.config.$DB.uidphp.php tests/
 
 jobs:
   allow_failures:
     - php: nightly
 
   include:
-      - stage: Test php7.0 & mariadb
+      - stage: Test php7.0 & mariadb 10.1
         php: 7.0
         services:
           - mysql
         env:
           - DB=mysql
-          - DB=mysql.uidmysql
-          - DB=mysql.uidphp
         addons:
             mariadb: '10.1'
-      - stage: Test
+      - stage: Test php7.0 & mariadb 10.2
         php: 7.0
         services:
           - mysql
         env:
           - DB=mysql
-          - DB=mysql.uidmysql
-          - DB=mysql.uidphp
         addons:
             mariadb: '10.2'
 
-      - stage: Test php7.1 & mariadb
+      - stage: Test php7.1 & mariadb 10.1
         php: 7.1
         services:
           - mysql
         env:
           - DB=mysql
-          - DB=mysql.uidmysql
-          - DB=mysql.uidphp
         addons:
             mariadb: '10.1'
-      - stage: Test
+      - stage: Test php7.1 & mariadb 10.2
         php: 7.1
         services:
           - mysql
         env:
           - DB=mysql
-          - DB=mysql.uidmysql
-          - DB=mysql.uidphp
         addons:
             mariadb: '10.2'
 
-      - stage: Test hhvm & mariadb
+      - stage: Test hhvm & mariadb 10.1
         php: hhvm
         services:
           - mysql
         env:
           - DB=mysql
-          - DB=mysql.uidmysql
-          - DB=mysql.uidphp
         addons:
             mariadb: '10.1'
-      - stage: Test
+      - stage: Test hhvm & mariadb 10.2
         php: hhvm
         services:
           - mysql
         env:
           - DB=mysql
-          - DB=mysql.uidmysql
-          - DB=mysql.uidphp
         addons:
             mariadb: '10.2'
 
-      - stage: Test php nightly & mariadb
+      - stage: Test php nightly & mariadb 10.1
         php: nightly
         services:
           - mysql
         env:
           - DB=mysql
-          - DB=mysql.uidmysql
-          - DB=mysql.uidphp
         addons:
             mariadb: '10.1'
-      - stage: Test
+      - stage: Test php nightly & mariadb 10.2
         php: nightly
         services:
           - mysql
         env:
           - DB=mysql
-          - DB=mysql.uidmysql
-          - DB=mysql.uidphp
         addons:
             mariadb: '10.2'
