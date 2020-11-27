@@ -21,9 +21,9 @@ env:
     - DB=sqlite
     - DB=postgresql
     - DB=mysql
-      VERSION='10.1'
+      TRAVIS_MARIADB_VERSION='10.1'
     - DB=mysql
-      VERSION='10.2'
+      TRAVIS_MARIADB_VERSION='10.2'
 install:
   - phpenv config-rm xdebug.ini || echo "xdebug not available"
   - composer install --no-interaction --quiet --optimize-autoloader
@@ -35,7 +35,3 @@ jobs:
   fast_finish: true
   allow_failures:
     - php: nightly
-  include:
-    - if: env(DB) = mysql
-      addons:
-        mariadb: env(VERSION)
