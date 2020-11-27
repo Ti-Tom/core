@@ -24,6 +24,9 @@ env:
       DBVERSION='10.1'
     - DB=mysql
       DBVERSION='10.2'
+addons:
+    - if: env(DB) = mysql
+      mariadb: env(DBVERSION)
 install:
   - phpenv config-rm xdebug.ini || echo "xdebug not available"
   - composer install --no-interaction --quiet --optimize-autoloader
@@ -35,7 +38,3 @@ jobs:
   fast_finish: true
   allow_failures:
     - php: nightly
-  include:
-    - if: env(DB) = mysql
-      addons:
-        - mariadb: env(DBVERSION)
