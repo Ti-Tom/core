@@ -9,7 +9,7 @@ cache:
 
 before_script:
     if [[ "$DB" == "mysql" ]]; then mysql -e 'DROP DATABASE IF EXISTS `pragma-core`; CREATE DATABASE `pragma-core`;'; fi;
-    if [[ "$DB" == "postgresql" ]]; then psql -c 'DROP DATABASE IF EXISTS "pragma-core"; CREATE DATABASE "pragma_core";' -U postgres; psql pragma_core -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"' -U postgres; fi;
+    if [[ "$DB" == "postgresql" ]]; then psql -c 'DROP DATABASE IF EXISTS "pragma_core"; CREATE DATABASE "pragma_core";' -U postgres; psql pragma_core -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"' -U postgres; fi;
 php:
   - '7.0'
   - '7.1'
@@ -21,9 +21,9 @@ env:
     - DB=sqlite
     - DB=postgresql
     - DB=mysql
-      TRAVIS_MARIADB_VERSION='10.1'
+      DBVERSION='10.1'
     - DB=mysql
-      TRAVIS_MARIADB_VERSION='10.2'
+      DBVERSION='10.2'
 install:
   - phpenv config-rm xdebug.ini || echo "xdebug not available"
   - composer install --no-interaction --quiet --optimize-autoloader
@@ -35,3 +35,7 @@ jobs:
   fast_finish: true
   allow_failures:
     - php: nightly
+  include:
+    - if: env(DB) = mysql
+      addons:
+        - mariadb: env(DBVERSION)
