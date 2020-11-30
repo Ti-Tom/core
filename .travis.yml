@@ -16,17 +16,6 @@ php:
   - '7.2'
   - '7.3'
   - 'nightly'
-env:
-  jobs:
-    - DB=sqlite
-    - DB=postgresql
-    - DB=mysql
-      DBVERSION='10.1'
-    - DB=mysql
-      DBVERSION='10.2'
-addons:
-    - if: env(DB) = mysql
-      mariadb: env(DBVERSION)
 install:
   - phpenv config-rm xdebug.ini || echo "xdebug not available"
   - composer install --no-interaction --quiet --optimize-autoloader
@@ -38,3 +27,26 @@ jobs:
   fast_finish: true
   allow_failures:
     - php: nightly
+  include:
+    - stage: Test SQLite
+      env:
+        - DB=sqlite
+    - stage: Test Postgresql
+      services:
+        - postgresql
+      env:
+        - DB=postgresql
+    - stage: Test Mariadb 10.1
+      services:
+        - mysql
+      env:
+        - DB=mysql
+      addons:
+        mariadb: '10.1'
+    - stage: Test Mariadb 10.2
+      services:
+        - mysql
+      env:
+        - DB=mysql
+      addons:
+        mariadb: '10.2'
